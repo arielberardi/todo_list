@@ -1,0 +1,4 @@
+<%= turbo_stream.replace dom_id(@task), @task %>
+<%= turbo_stream.replace 'form' do %>
+  <%= render partial: 'form', locals: { title: 'Add Task', task: Task.new } %>
+<% end %>
