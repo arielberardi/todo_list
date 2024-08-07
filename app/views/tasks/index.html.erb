@@ -2,20 +2,22 @@
 <h1 class="h1">TODO List</h1>
 <div class="row">
   <div class="col-12 col-md-6">
-    <table class="table table-responsive table-hover align-middle">
-      <thead>
-        <th class="col-1">Status</th>
-        <th>Task</th>
-        <th class="col-1">Actions</th>
-      </thead>
-      <tbody id="tasks">
-        <%= render @tasks %>
-      </tbody>
-    </table>
+    <%= turbo_frame_tag 'tasks_paginated' do %>
+      <table class="table table-responsive table-hover align-middle">
+        <thead>
+          <th class="col-1">Status</th>
+          <th>Task</th>
+          <th class="col-1">Actions</th>
+        </thead>
+        <tbody id="tasks">
+          <%= render @tasks %>
+        </tbody>
+      </table>
+      <%== pagy_bootstrap_nav(@pagy) %>
+    <% end %>
   </div>
   <div class="col-12 col-md-6 ps-md-5">
     <%= render partial: 'form', locals: { title: 'Add Task', task: @task } %>
   </div>
 </div>
-<!-- Pagination of Task (Paggy or Kaminari) -->
 <!-- Search of Tasks (Stimulus and ??) -->

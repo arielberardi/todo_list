@@ -10,7 +10,7 @@
 
 Task.destroy_all
 
-(0..10).each do |n|
+(0..40).each do |n|
   task = Task.create(title: "Task #{n}")
   task.completed! if [2, 5, 7, 9].include?(n)
 end
