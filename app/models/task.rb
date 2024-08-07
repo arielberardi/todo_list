@@ -9,4 +9,12 @@ class Task < ApplicationRecord
   def to_s
     title
   end
+
+  def toggle_status!
+    if pending?
+      completed!
+    else
+      pending!
+    end
+  end
 end

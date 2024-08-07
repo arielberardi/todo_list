@@ -1,8 +1,8 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:edit, :update, :destroy]
+  before_action :set_task, only: [:edit, :update, :destroy, :toggle_status]
 
   def index
-    @tasks = Task.all
+    @tasks = Task.order(:created_at)
     @task = Task.new
   end
 
@@ -21,11 +21,7 @@ class TasksController < ApplicationController
     else
       respond_to do |format|
         format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.update('form', partial: 'tasks/form', locals: { title: 'Add Task', task: @task })
-          ]
-        end
+        format.turbo_stream { render  'create_error' }
       end
     end
   end
@@ -43,14 +39,8 @@ class TasksController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.update('form', partial: 'tasks/form', locals: { title: 'Edit Task', task: @task })
-          ]
-        end
+        format.turbo_stream { render 'update_error' }
       end
-
     end
   end
 
@@ -58,7 +48,14 @@ class TasksController < ApplicationController
     @task.destroy!
 
     respond_to do |format|
-      format.html { redirect_to tasks_url, notice: "Task was successfully destroyed." }
+      format.turbo_stream
+    end
+  end
+
+  def toggle_status
+    @task.toggle_status!
+
+    respond_to do |format|
       format.turbo_stream
     end
   end
