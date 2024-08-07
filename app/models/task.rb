@@ -17,4 +17,8 @@ class Task < ApplicationRecord
       pending!
     end
   end
+
+  def self.search(query)
+    query.blank? ? all : where("title LIKE ?", "%#{sanitize_sql_like(query)}%")
+  end
 end

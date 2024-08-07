@@ -2,7 +2,7 @@
 <h1 class="h1">TODO List</h1>
 <div class="row">
   <div class="col-12 col-md-6">
-    <%= turbo_frame_tag 'tasks_paginated' do %>
+    <%= turbo_frame_tag 'tasks-paginated' do %>
       <table class="table table-responsive table-hover align-middle">
         <thead>
           <th class="col-1">Status</th>
@@ -13,11 +13,28 @@
           <%= render @tasks %>
         </tbody>
       </table>
-      <%== pagy_bootstrap_nav(@pagy) %>
+      <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
     <% end %>
   </div>
   <div class="col-12 col-md-6 ps-md-5">
+    <div class="border rounded shadow px-3 pb-3 pt-2 mb-2">
+      <%= form_tag tasks_path,
+                    method: :get,
+                    class: 'form-inline',
+                    data: { turbo_frame: 'tasks-paginated',
+                            turbo_action: 'advance',
+                            controller: 'search',
+                            action: 'input->search#submit' } do %>
+        <div class="row">
+          <div class="col-auto">
+            <%= text_field_tag :query, params[:query], class: 'form-control', placeholder: 'Search a task..' %>
+          </div>
+          <div class="col-auto">
+            <%= submit_tag 'Search', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
     <%= render partial: 'form', locals: { title: 'Add Task', task: @task } %>
   </div>
 </div>
-<!-- Search of Tasks (Stimulus and ??) -->
